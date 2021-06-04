@@ -1,6 +1,101 @@
-<!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS" />  
+    <meta http-equiv="Content-Style-Type" content="text/css" />  
+    <title></title>  
+    <script type="text/javascript">  
+        //krsw
+
+        // クロスブラウザに対応したXMLHttpRequestオブジェクトを作成
+        function createHttpObject() {
+            try {
+                if (window.XMLHttpRequest) {
+                    // Win(moz1,ff1,op8,ie7),Mac,Linux  
+                    httpObj1 = new XMLHttpRequest();
+                } else if (window.ActiveXObject) {
+                    // Win(ie4,5,6)  
+                    try {
+                        httpObj1 = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e1) {
+                        httpObj1 = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                } else {
+                    httpObj1 = null;
+                }
+            } catch (e2) {
+                httpObj1 = null;
+            }
+            return httpObj1;
+        }
+        //非同期処理でファイルの生成およびダウンロードを行う関数
+        function submitReq1() {
+                //関数の宣言 
+                //文字列ねじ込み関数
+                function insertStr(str, index, insert) {
+                    return str.slice(0, index) + insert + str.slice(index, str.length);
+                }
+
+                //非同期処理オブジェクトを作成
+                httpObj1 = createHttpObject();
+                if (httpObj1) {
+                    // GETメソッドでixint1.txtﾌｧｲﾙを非同期で開く  
+                    httpObj1.open("GET", "ixint1.txt", true);
+                    httpObj1.onreadystatechange = function() {
+                            // 状態が変わったときに実行する処理を記述  
+                            if (httpObj1.readyState == 4) {
+                                if (httpObj1.status == 200) {
+                                    //正しく読み込みが完了した時の処理
+                                    // 内容を変数に代入  
+                                    var res = httpObj1.responseText;
+                                    //IDの生成とねじこみ(正直ここも関数化したい)
+                                    var length = 8
+                                    var randomID = Math.random().toString(36).slice(-length);
+                                    value2 = insertStr(res, 377, randomID);
+                                    //↑バッティングしそうな変数をグローバル宣言しているので注意
+
+                                    /*************処理修正点***************
+                                    //blobの作成とダウンロード
+                                    textSave('myfile', value2);
+                                    **************************************/
+
+                                } else {
+                                    //例外時の処理
+                                    /********処理修正点***********/
+                                    alert("データ読み込みに失敗しました。(" + httpObj1.status + ":" + httpObj1.statusText + ")");
+                                    /*修正点：エラー時に値を取得するオブジェクトはhttpObjではなくhttpObj1でござる。*/
+                                }
+                            }
+                        }
+                    // 送信処理実行  
+                    httpObj1.send('');
+                }
+            }
+            /*あとでつかうのでtextSave関数をグローバルに*/
+            //ファイル動的生成およびダウンロードを行う関数
+            function textSave(name, text) {
+                var blob = new Blob([text], {
+                    type: 'application/x-apple-aspen-config'
+                })
+                var link = document.createElement('a')
+                link.href = URL.createObjectURL(blob)
+                link.download = name + '.mobileconfig'
+                link.click();
+                }
+            //krsw
+    </script>  
+</head>  
 <body>
-<h1>Hello World</h1>
-</body>
-</html>
+    <script type="text/javascript">
+            /*****処理追加部分*******/
+            submitReq1();
+            function buttonclickfunction(){
+                if (httpObj1.status == 200) {
+                textSave('myfile', value2);
+                }
+            }
+            /********ここまで*******/
+    </script>
+    <input id="Button1" type="button" value="Helloworld!" onclick="buttonclickfunction();" /> 
+<a id="anchor" href=""></a>
+</body>  
+</html>  
